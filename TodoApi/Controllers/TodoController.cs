@@ -10,9 +10,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : Controller
     {
-        private readonly TodoContext _context;
+        private readonly LazyDbContext _context;
 
-        public TodoController(TodoContext context)
+        public TodoController(LazyDbContext context)
         {
             _context = context;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace TodoApi.Models
     public class QuestViewModel
     {
         public string OwnerID { get; set; }
+        [Key]
         public string QuestID { get; set; }
         public string Type { get; set; }
         public int Progress { get; set; }

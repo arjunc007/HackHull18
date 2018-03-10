@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class AchievementController : Controller
     {
-        private readonly AchievementContext _context;
+        private readonly LazyDbContext _context;
 
-        public AchievementController(AchievementContext context)
+        public AchievementController(LazyDbContext context)
         {
             _context = context;
         }
