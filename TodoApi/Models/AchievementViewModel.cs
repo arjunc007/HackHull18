@@ -10,9 +10,11 @@ namespace TodoApi.Models
     {
         [Key]
         public string AchievementID { get; set; }
+        public string OwnerID { get; set; }
         public string Description { get; set; }
-        public float Amount { get; set; }
-        public int Condition { get; set; }
+        public float PointsReward { get; set; }
+        public int Goal { get; set; }
+        public int Current { get; set; }
         public bool Completed { get; set; }
         public string AssociatedQuests { get; set; }
     }

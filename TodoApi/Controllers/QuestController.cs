@@ -25,12 +25,20 @@ namespace TodoApi.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        [HttpGet("{id}/{amount}")]
+        public ActionResult Get(string id, int amount)
+        {
+
+
+            return new ObjectResult(null);
+        }
+
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
             QuestViewModel[] models = _context.QuestItems
-                .Where(x => x.OwnerID == id && x.Completed == false)
+                .Where(x => x.OwnerID == id && x.Completed == false && x.EndDate < DateTime.Now)
                 .ToArray();
 
             if (models == null || models.Length == 0)
@@ -54,6 +62,7 @@ namespace TodoApi.Controllers
                 return NotFound();
 
             QuestUpdate(quest);
+
             _context.SaveChanges();
 
             return Ok();
@@ -65,6 +74,41 @@ namespace TodoApi.Controllers
             if (quest.Progress >= quest.EndPoint)
             {
                 quest.Completed = true;
+                QuestCompleted(quest);
+            }
+        }
+
+
+        void QuestCompleted(QuestViewModel quest)
+        {
+            AchievementViewModel[] achievements = _context.AchievementItems
+                .Where(x => x.OwnerID == quest.OwnerID
+                && x.AssociatedQuests == quest.Type)
+                .ToArray();
+
+            float amountToAdd = 0;
+            var length = achievements.Length;
+            for (int i = 0; i < length; i++)
+            {
+                var achievement = achievements[i];
+                achievement.Current++;
+                if(achievement.Current >= achievement.Goal)
+                {
+                    achievement.Completed = true;
+                    amountToAdd += achievement.PointsReward;
+                }
+            }
+
+            if(amountToAdd > 0)
+            {
+                UserViewModel user = _context.UserItems
+                    .Where(x => x.ID == quest.OwnerID)
+                    .First();
+
+                if(user != null)
+                {
+                    user.CurrencyAmount += amountToAdd;
+                }
             }
         }
 

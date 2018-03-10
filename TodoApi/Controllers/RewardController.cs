@@ -23,13 +23,15 @@ namespace TodoApi.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            return new string[] { "All items in Reward Dictionary" };
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            
+
             return "value";
         }
 
