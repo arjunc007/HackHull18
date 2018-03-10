@@ -8,7 +8,7 @@ namespace TodoApi.Models
     public class QuestViewModel
     {
         public string OwnerID { get; set; }
-        public string questID { get; set; }
+        public string QuestID { get; set; }
         public string Type { get; set; }
         public int Progress { get; set; }
         public int EndPoint { get; set; }

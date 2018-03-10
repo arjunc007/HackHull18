@@ -8,7 +8,7 @@ using TodoApi.Models;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TodoApi.Controllers
-{ 
+{
     [Route("api/[controller]")]
     public class QuestController : Controller
     {
@@ -17,7 +17,7 @@ namespace TodoApi.Controllers
         public QuestController(QuestContext context)
         {
             _context = context;
-        } 
+        }
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -29,10 +29,11 @@ namespace TodoApi.Controllers
         [HttpGet("{id}")]
         public ActionResult Get(string id)
         {
-            QuestViewModel[] models = _context.QuestItems.
-                Where(x => x.OwnerID == id).ToArray();
-                
-            if(models == null || models.Length == 0)
+            QuestViewModel[] models = _context.QuestItems
+                .Where(x => x.OwnerID == id && x.Completed == false)
+                .ToArray();
+
+            if (models == null || models.Length == 0)
             {
                 return NotFound();
             }
@@ -42,8 +43,29 @@ namespace TodoApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public ActionResult Post([FromBody]QuestViewModel value)
         {
+            QuestViewModel quest = _context.QuestItems
+                .Where(x => x.OwnerID == value.OwnerID
+                && x.QuestID == value.QuestID)
+                .First();
+
+            if (quest == null)
+                return NotFound();
+
+            QuestUpdate(quest);
+            _context.SaveChanges();
+
+            return Ok();
+        }
+
+        void QuestUpdate(QuestViewModel quest)
+        {
+            quest.Progress++;
+            if (quest.Progress >= quest.EndPoint)
+            {
+                quest.Completed = true;
+            }
         }
 
         // PUT api/<controller>/5
