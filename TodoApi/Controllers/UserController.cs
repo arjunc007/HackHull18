@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        private readonly UserContext _context;
+        private readonly LazyDbContext _context;
 
-        public UserController(UserContext context)
+        public UserController(LazyDbContext context)
         {
             _context = context;
             if (_context.UserItems.Count() == 0)

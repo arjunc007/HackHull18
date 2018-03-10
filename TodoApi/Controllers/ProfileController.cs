@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class ProfileController : Controller
     {
-        private readonly ProfileContext _context;
+        private readonly LazyDbContext _context;
 
-        public ProfileController(ProfileContext context)
+        public ProfileController(LazyDbContext context)
         {
             _context = context;
         }
