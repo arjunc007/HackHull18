@@ -10,38 +10,28 @@ using TodoApi.Models;
 namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
-    public class UserController : Controller
+    public class CurrencyController : Controller
     {
-        private readonly UserContext _context;
+        private readonly CurrencyContext _context;
 
-        public UserController(UserContext context)
+        public CurrencyController(CurrencyContext context)
         {
             _context = context;
-            if (_context.UserItems.Count() == 0)
-            {
-                _context.UserItems.Add(new UserViewModel
-                {
-                    Username = "Iskandar",
-                    Password = "password",
-                    ID = Guid.NewGuid().ToString()
-                });
-                _context.SaveChanges();
-            }
         }
 
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "Adw", "awda" };
+            return new string[] { "Currency"};
         }
 
-        // GET api/<controller>/username/password
-        [HttpGet("{username}/{password}")]
-        public ActionResult Get(string username, string password)
+        // GET api/<controller>/5
+        [HttpGet("{id}")]
+        public ActionResult Get(string id)
         {
-            var model = _context.UserItems.
-                Where(x => x.Username == username && x.Password == password).
+            CurrencyViewModel model = _context.CurrencyItems.
+                Where(x => x.OwnerID == id).
                 First();
 
             if (model == null)
@@ -52,13 +42,18 @@ namespace TodoApi.Controllers
 
         // POST api/<controller>
         [HttpPost]
-        public ActionResult Post([FromBody]UserViewModel value)
+        public ActionResult Post([FromBody]CurrencyViewModel value)
         {
-            _context.UserItems.Add(value);
-            _context.SaveChanges();
+            var ci = _context.CurrencyItems.
+                Where(x => value.OwnerID == x.OwnerID).First();
+
+            if (ci == null)
+                return NotFound();
+
+            ci.CurrencyTotal = value.CurrencyTotal;
+            ci.TransactionID = value.TransactionID;
 
             return Ok();
-            //return CreatedAtRoute(;
         }
 
         // PUT api/<controller>/5

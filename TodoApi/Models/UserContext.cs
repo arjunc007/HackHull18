@@ -10,5 +10,6 @@ namespace TodoApi.Models
         }
 
         public DbSet<UserViewModel> UserItems { get; set; }
+        public DbSet<>
     }
 }
