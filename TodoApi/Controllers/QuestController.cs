@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class QuestController : Controller
     {
-        private readonly QuestContext _context;
+        private readonly LazyDbContext _context;
 
-        public QuestController(QuestContext context)
+        public QuestController(LazyDbContext context)
         {
             _context = context;
         }

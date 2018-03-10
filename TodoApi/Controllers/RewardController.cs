@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class RewardController : Controller
     {
-        private readonly RewardContext _context;
+        private readonly LazyDbContext _context;
 
-        public RewardController(RewardContext context)
+        public RewardController(LazyDbContext context)
         {
             _context = context;
         }

@@ -12,9 +12,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class CurrencyController : Controller
     {
-        private readonly CurrencyContext _context;
+        private readonly LazyDbContext _context;
 
-        public CurrencyController(CurrencyContext context)
+        public CurrencyController(LazyDbContext context)
         {
             _context = context;
         }
