@@ -17,23 +17,27 @@ namespace TodoApi.Controllers
         public UserController(LazyDbContext context)
         {
             _context = context;
+
             if (_context.UserItems.Count() == 0)
             {
-                _context.UserItems.Add(new UserViewModel
+                var users = new List<UserViewModel>
                 {
-                    Username = "Iskandar",
-                    Password = "password",
-                    ID = Guid.NewGuid().ToString()
-                });
-                _context.SaveChanges();
+                    new UserViewModel { ID = Guid.NewGuid().ToString(), Password = "pass", Username = "Arjun"},
+                    new UserViewModel { ID = Guid.NewGuid().ToString(), Password = "password", Username = "Iskandar" },
+                    new UserViewModel { ID = Guid.NewGuid().ToString(), Password = "words", Username = "Josh" },
+                    new UserViewModel { ID = Guid.NewGuid().ToString(), Password = "", Username = "Ephra" }
+                };
+                _context.AddRange(users);
             }
+
+            _context.SaveChanges();
         }
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<UserViewModel> Get()
         {
-            return new string[] { "Adw", "awda" };
+            return _context.UserItems.ToList();
         }
 
         // GET api/<controller>/username/password
