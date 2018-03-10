@@ -10,6 +10,7 @@ namespace TodoApi.Models
     {
         [Key]
         public string RewardID { get; set; }
+        public string OwnerID { get; set; }
         public string Name { get; set; }
         public float Cost { get; set; }
     }

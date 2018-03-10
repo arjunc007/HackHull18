@@ -10,5 +10,6 @@ namespace TodoApi.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string ID { get; set; }
+        public float CurrencyAmount { get; set; }
     }
 }
