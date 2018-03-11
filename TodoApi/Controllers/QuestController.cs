@@ -17,7 +17,20 @@ namespace TodoApi.Controllers
         public QuestController(LazyDbContext context)
         {
             _context = context;
+
+            if (_context.QuestItems.Count() == 0)
+            {
+                var users = new List<QuestViewModel>
+                {
+                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Daily" , Text = "Attend all Lectures", Accepted = true, Progress = 1, EndPoint = 3, EndDate = DateTime.Today.AddDays(30), Completed = false},
+                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Complete Assignment 1", Accepted = true, Progress = 326, EndPoint = 1000, EndDate = DateTime.Now.AddHours(2), Completed = false},
+                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Write 1000 Word Essay", Accepted = false, Progress = 0, EndPoint = 1000, EndDate = DateTime.Today.AddDays(7), Completed = false},
+                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Select a Dissertation Topic", Accepted = true, Progress = 1, EndPoint = 1, EndDate = DateTime.Today.AddDays(2), Completed = true}
+                };
+                _context.AddRange(users);
+            }
         }
+
         // GET: api/<controller>
         [HttpGet]
         public IEnumerable<string> Get()

@@ -21,9 +21,9 @@ namespace TodoApi.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<AchievementViewModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.AchievementItems.ToList();
         }
 
         // GET api/<controller>/5
