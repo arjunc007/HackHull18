@@ -18,17 +18,17 @@ namespace TodoApi.Controllers
         {
             _context = context;
 
-            if (_context.QuestItems.Count() == 0)
-            {
-                var users = new List<QuestViewModel>
-                {
-                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Daily" , Text = "Attend all Lectures", Accepted = true, Progress = 1, EndPoint = 3, EndDate = DateTime.Today.AddDays(30), Completed = false},
-                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Complete Assignment 1", Accepted = true, Progress = 326, EndPoint = 1000, EndDate = DateTime.Now.AddHours(2), Completed = false},
-                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Write 1000 Word Essay", Accepted = false, Progress = 0, EndPoint = 1000, EndDate = DateTime.Today.AddDays(7), Completed = false},
-                    new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Select a Dissertation Topic", Accepted = true, Progress = 1, EndPoint = 1, EndDate = DateTime.Today.AddDays(2), Completed = true}
-                };
-                _context.AddRange(users);
-            }
+            //if (_context.QuestItems.Count() == 0)
+            //{
+            //    var users = new List<QuestViewModel>
+            //    {
+            //        new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Daily" , Text = "Attend all Lectures", Accepted = true, Progress = 1, EndPoint = 3, EndDate = DateTime.Today.AddDays(30), Completed = false},
+            //        new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Complete Assignment 1", Accepted = true, Progress = 326, EndPoint = 1000, EndDate = DateTime.Now.AddHours(2), Completed = false},
+            //        new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Write 1000 Word Essay", Accepted = false, Progress = 0, EndPoint = 1000, EndDate = DateTime.Today.AddDays(7), Completed = false},
+            //        new QuestViewModel { QuestID = Guid.NewGuid().ToString(), OwnerID = "1001", Type = "Quest", Text = "Select a Dissertation Topic", Accepted = true, Progress = 1, EndPoint = 1, EndDate = DateTime.Today.AddDays(2), Completed = true}
+            //    };
+            //    _context.AddRange(users);
+            //}
         }
 
         // GET: api/<controller>
@@ -94,7 +94,7 @@ namespace TodoApi.Controllers
         public ActionResult Get(string id)
         {
             QuestViewModel[] models = _context.QuestItems
-                .Where(x => x.OwnerID == id && x.Completed == false && x.EndDate < DateTime.Now)
+                .Where(x => x.OwnerID == id && x.Completed == false && x.EndDate > DateTime.Now)
                 .ToArray();
 
             if (models == null || models.Length == 0)
@@ -109,24 +109,25 @@ namespace TodoApi.Controllers
         [HttpPost]
         public ActionResult Post([FromBody]QuestViewModel value)
         {
+
             QuestViewModel quest = _context.QuestItems
                 .Where(x => x.OwnerID == value.OwnerID
                 && x.QuestID == value.QuestID)
-                .First();
+                .FirstOrDefault();
 
             if (quest == null)
                 return NotFound();
 
-            QuestUpdate(quest);
+            QuestUpdate(quest, value.Progress);
 
             _context.SaveChanges();
 
             return Ok();
         }
 
-        void QuestUpdate(QuestViewModel quest)
+        void QuestUpdate(QuestViewModel quest, int progress)
         {
-            quest.Progress++;
+            quest.Progress += progress;
             if (quest.Progress >= quest.EndPoint)
             {
                 quest.Completed = true;

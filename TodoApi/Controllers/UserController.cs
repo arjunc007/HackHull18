@@ -72,7 +72,21 @@ namespace TodoApi.Controllers
         {
             var model = _context.UserItems.
                 Where(x => x.Username == username && x.Password == password).
-                First();
+                FirstOrDefault();
+
+            if (model == null)
+                return NotFound();
+
+            return new ObjectResult(model);
+        }
+
+        // GET api/<controller>/username/password
+        [HttpGet("{id}")]
+        public ActionResult Get(string id)
+        {
+            var model = _context.UserItems.
+                Where(x => x.ID == id).
+                FirstOrDefault();
 
             if (model == null)
                 return NotFound();
