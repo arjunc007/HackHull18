@@ -25,16 +25,18 @@ namespace TodoApi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet("{id}/{amount}")]
-        public ActionResult Get(string id, int amount)
+        [HttpGet("CreateQuests/{id}")]
+        public ActionResult GetNew(string  id)
         {
+            //Fetch Quest
+            //Add them to the Quest Table
+            //Return new quests
 
-
-            return new ObjectResult(null);
+            return "OK";
         }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
+        [HttpGet("GetCurrent/{id}")]
         public ActionResult Get(string id)
         {
             QuestViewModel[] models = _context.QuestItems

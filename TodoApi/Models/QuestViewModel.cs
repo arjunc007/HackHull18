@@ -14,6 +14,7 @@ namespace TodoApi.Models
         public string Type { get; set; }
         public int Progress { get; set; }
         public int EndPoint { get; set; }
+        public string Origin { get; set; }
         public string Text { get; set; }
         public bool Accepted { get; set; }
         public DateTime EndDate { get; set; }
