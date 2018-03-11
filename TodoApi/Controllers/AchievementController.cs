@@ -31,7 +31,8 @@ namespace TodoApi.Controllers
         public ActionResult Get(string id)
         {
             var model = _context.AchievementItems.
-                First(x => x.AchievementID == id);
+                Where(x => x.AchievementID == id)
+                .ToArray();
 
             if (model == null)
                 return NotFound();

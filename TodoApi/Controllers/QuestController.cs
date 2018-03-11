@@ -26,13 +26,54 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet("CreateQuests/{id}")]
-        public ActionResult GetNew(string  id)
+        public ActionResult GetNew(string id)
         {
             //Fetch Quest
             //Add them to the Quest Table
-            //Return new quests
+            //Return new quest
 
-            return "OK";
+            var today = DateTime.Now.Date;
+
+            var QuestModel = new QuestViewModel()
+            {
+                OwnerID = id,
+                QuestID = Guid.NewGuid().ToString(),
+                Type = "daily",
+                Progress = 0,
+                EndPoint = 3,
+                Origin = "84420/ComputerScience/",
+                Text = "Go to 3 lectures today",
+                Accepted = true,
+                EndDate = today.AddDays(1),
+                Completed = false
+            };
+
+            var model1 = QuestModel;
+            _context.QuestItems.Add(QuestModel);
+
+            QuestModel.QuestID = Guid.NewGuid().ToString();
+            QuestModel.Text = "Go to 3 Labs today";
+            var model2 = QuestModel;
+            _context.QuestItems.Add(QuestModel);
+
+            //QuestModel.QuestID = Guid.NewGuid().ToString();
+            //QuestModel.Type = "quest";
+            //QuestModel.EndPoint = 10;
+            //QuestModel.Origin = "84420/ComputerScience/AI";
+            //QuestModel.Text = "Study once every day till the exam";
+            //QuestModel.Accepted = false;
+            //var model3 = QuestModel;
+            //_context.QuestItems.Add(QuestModel);
+
+            _context.SaveChanges();
+
+            QuestViewModel[] toReturn = new QuestViewModel[]{
+                model1,
+                model2
+               // model3
+            };
+
+            return new ObjectResult(toReturn);
         }
 
         // GET api/<controller>/5
@@ -94,20 +135,20 @@ namespace TodoApi.Controllers
             {
                 var achievement = achievements[i];
                 achievement.Current++;
-                if(achievement.Current >= achievement.Goal)
+                if (achievement.Current >= achievement.Goal)
                 {
                     achievement.Completed = true;
                     amountToAdd += achievement.PointsReward;
                 }
             }
 
-            if(amountToAdd > 0)
+            if (amountToAdd > 0)
             {
                 UserViewModel user = _context.UserItems
                     .Where(x => x.ID == quest.OwnerID)
                     .First();
 
-                if(user != null)
+                if (user != null)
                 {
                     user.CurrencyAmount += amountToAdd;
                 }
